@@ -145,7 +145,7 @@ fun varInput() : List<Int> {
     return varInput()
 }
 
-fun playGame(gameID: Int) { // !!!!!!
+fun playGame(gameID: Int) { // TODO: Add option to exit mid-game.
     var moves : Int = 0
     var over : Boolean = false
     val pOne = Player("X")
