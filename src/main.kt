@@ -66,11 +66,9 @@ class GameBoard {
         _board[x][y] = symbol
     }
 
-    fun gameTied() : Boolean{
-        return board.all { x -> x.all { it != " " } }
-    }
     fun print(){
         val toPrint = mutableListOf<String>()
+
         for (row in board) {
             var rowString : String = "|"
             for (x in row.withIndex()) {
@@ -95,18 +93,34 @@ class GameBoard {
     }
 
     fun printInitialBoard() {
+        val toPrint = mutableListOf<String>()
         val initial = arrayOf(
             arrayOf(1, 2, 3),
             arrayOf(4, 5, 6),
             arrayOf(7, 8, 9))
 
+        for (row in initial) {
+            var rowString : String = "|"
+            for (x in row.withIndex()) {
+                if (x.index == 1) {
+                    var toAdd : String = x.value.toString()
+                    rowString += "| $toAdd |"
+                } else {
+                    var toAdd : String = x.value.toString()
+                    rowString += " $toAdd "
+                }
+            }
+            rowString  += "|"
+            toPrint += rowString
+        }
         println("-".repeat(13))
-        println(initial[0].map { it -> it.toString()})
+        println(toPrint[0])
         println("-".repeat(13))
-        println(initial[1])
+        println(toPrint[1])
         println("-".repeat(13))
-        println(initial[2])
+        println(toPrint[2])
         println("-".repeat(13))
+        println("To place your marker symbol, select any of the 9 grid squares...")
     }
 }
 
@@ -150,31 +164,33 @@ fun playGame(gameID: Int) { // !!!!!!
             if (moves == 0) gameBoard.printInitialBoard()
             else gameBoard.print()
 
-            println("Make your move in this format: x y")
+            println("Player ${currentPlayer.symbol} make your move:")
             var (x, y) = varInput()
-            // TODO: check x, y values are valid
             if (gameBoard.board[x][y] != " ") {
                 println("Invalid choice.")
-                // TODO: call makemove() again
             } else {
                 gameBoard.makeMove(x, y, currentPlayer.symbol)
                 moves += 1
                 if (ticTacToe.checkColumns(gameBoard)[0] != -1) {
+                    gameBoard.print()
                     println("Player ${ticTacToe.checkColumns(gameBoard)[1]} wins in column ${ticTacToe.checkColumns(gameBoard)[0]}")
                     over = true
                     continue
                 }
                 if (ticTacToe.checkRows(gameBoard)[0] != -1) {
+                    gameBoard.print()
                     println("Player ${ticTacToe.checkRows(gameBoard)[1]} wins in row ${ticTacToe.checkRows(gameBoard)[0]}")
                     over = true
                     continue
                 }
                 if (ticTacToe.checkDiagonals(gameBoard)[0] != -1) {
+                    gameBoard.print()
                     println("Player ${ticTacToe.checkDiagonals(gameBoard)[1]} wins in diagonal ${ticTacToe.checkDiagonals(gameBoard)[0]}")
                     over = true
                     continue
                 }
                 if (moves == 9) {
+                    gameBoard.print()
                     println("Game has tied.")
                     over = true
                     continue
@@ -191,7 +207,5 @@ fun main() {
             0 -> GAMELOOP = false
             1 -> playGame(1)
         }
-        //
-        //
     }
 }
